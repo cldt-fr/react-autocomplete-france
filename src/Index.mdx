@@ -2,13 +2,79 @@ import { Meta } from '@storybook/blocks';
 
 <Meta title="Getting started" />
 
-# Create React UI Lib Template
+# react-autocomplete-france
 
-Thank you for using Create React UI Lib! Now, open the project in your favorite code editor and start hacking on your components.
+Headless React hook for French address autocomplete powered by [Géoplateforme](https://data.geopf.fr/geocodage).
 
-There is a demo component, you can use it as a reference. You can also use MDX, just as this file — `Index.mdx`.
+**Zero UI opinions** — bring your own components and styles (MUI, Ant Design, shadcn/ui, Tailwind, plain HTML...).
 
-## About Storybook
+## Installation
 
-[Storybook](https://storybook.js.org/) helps you build UI components in isolation from your app's business logic, data, and context.
-That makes it easy to develop components as well as writing documentation for them.
+```bash
+npm install react-autocomplete-france
+```
+
+## Basic usage
+
+```tsx
+import { useAutocomplete } from 'react-autocomplete-france'
+
+function AddressInput() {
+  const { query, setQuery, suggestions, isLoading, isOpen, selectSuggestion } = useAutocomplete({
+    onSelect: (suggestion) => console.log(suggestion),
+  })
+
+  return (
+    <div>
+      <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Rechercher une adresse..." />
+      {isOpen && (
+        <ul>
+          {isLoading
+            ? <li>Chargement...</li>
+            : suggestions.map((s) => (
+                <li key={s.properties.id} onClick={() => selectSuggestion(s)}>
+                  {s.properties.label}
+                </li>
+              ))
+          }
+        </ul>
+      )}
+    </div>
+  )
+}
+```
+
+## Hook options
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSelect` | `(suggestion: AutocompleteFeature) => void` | — | Called when a suggestion is selected |
+| `debounce` | `number` | `300` | Debounce delay in ms |
+| `limit` | `number` | `5` | Max number of suggestions |
+| `searchParams` | `Partial<AutocompleteQueryParams>` | — | Additional API search params (postcode, type, etc.) |
+| `baseURL` | `string` | `https://data.geopf.fr/geocodage` | Custom API base URL |
+
+## Hook return value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `query` | `string` | Current search query |
+| `setQuery` | `(value: string) => void` | Update the search query |
+| `suggestions` | `AutocompleteFeature[]` | List of suggestions |
+| `isLoading` | `boolean` | Whether the API request is in progress |
+| `isOpen` | `boolean` | Whether suggestions should be displayed |
+| `selectSuggestion` | `(suggestion) => void` | Select a suggestion |
+| `clear` | `() => void` | Clear query and suggestions |
+
+## Advanced: direct API usage
+
+```ts
+import { AutocompleteAPI } from 'react-autocomplete-france'
+
+const api = new AutocompleteAPI()
+const results = await api.autocompleteAddress('10 rue de la paix', 5)
+```
+
+## Migration from v1.x
+
+See [MIGRATION.md](https://github.com/cldt-fr/react-autocomplete-france/blob/main/MIGRATION.md) for details.

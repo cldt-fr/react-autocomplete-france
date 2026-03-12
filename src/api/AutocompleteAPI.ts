@@ -3,19 +3,20 @@ import {AutocompleteQueryParams, AutocompleteResponse} from "../types";
 export default class AutocompleteAPI {
     private baseURL: string;
 
-    constructor(baseURL = 'https://api-adresse.data.gouv.fr') {
+    constructor(baseURL = 'https://data.geopf.fr/geocodage') {
         this.baseURL = baseURL;
     }
 
     private buildQueryString(params: AutocompleteQueryParams): string {
         return Object.entries(params)
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .filter(([, value]) => value !== undefined)
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
             .join('&');
     }
 
     public async searchAddress(params: AutocompleteQueryParams): Promise<AutocompleteResponse> {
         const queryString = this.buildQueryString(params);
-        const url = `${this.baseURL}/search/?${queryString}`;
+        const url = `${this.baseURL}/search?${queryString}`;
 
         try {
             const response = await fetch(url);
@@ -30,6 +31,6 @@ export default class AutocompleteAPI {
     }
 
     public async autocompleteAddress(query: string, limit: number = 5): Promise<AutocompleteResponse> {
-        return this.searchAddress({ q: query, autocomplete: 1, limit });
+        return this.searchAddress({ q: query, autocomplete: '1', limit });
     }
 }

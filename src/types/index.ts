@@ -1,23 +1,29 @@
 export interface AutocompleteQueryParams {
-    q: string;
+    q?: string;
+    autocomplete?: '1' | '0';
+    index?: string;
     limit?: number;
     lat?: number;
     lon?: number;
+    returntruegeometry?: boolean;
     postcode?: string;
     citycode?: string;
-    type?: string;
-    autocomplete?: number;
-    [key: string]: any;
+    type?: 'housenumber' | 'street' | 'locality' | 'municipality';
+    city?: string;
+    category?: string;
+    departmentcode?: string;
+    municipalitycode?: string;
+    oldmunicipalitycode?: string;
+    districtcode?: string;
+    section?: string;
+    number?: string;
+    sheet?: string;
+    [key: string]: string | number | boolean | undefined;
 }
 
 export interface AutocompleteResponse {
     type: string
-    version: string
     features: AutocompleteFeature[]
-    attribution: string
-    licence: string
-    query: string
-    limit: number
 }
 
 export interface AutocompleteFeature {
@@ -34,7 +40,8 @@ export interface AutocompleteGeometry {
 export interface AutocompleteProperties {
     label: string
     score: number
-    housenumber: string
+    _score: number
+    housenumber?: string
     id: string
     name: string
     postcode: string
@@ -42,9 +49,10 @@ export interface AutocompleteProperties {
     x: number
     y: number
     city: string
+    district?: string
     context: string
     type: string
+    _type: string
     importance: number
-    street: string
-    banId?: string
+    street?: string
 }

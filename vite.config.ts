@@ -6,9 +6,7 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
     plugins: [
         react(),
-        dts({
-            insertTypesEntry: true,
-        }),
+        dts(),
     ],
     build: {
         sourcemap: true,
@@ -19,11 +17,13 @@ export default defineConfig({
             fileName: (format) => `index.${format}.js`,
         },
         rollupOptions: {
-            external: ['react', 'react-dom'],
+            external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime'],
             output: {
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
+                    'react-dom/client': 'ReactDOM',
+                    'react/jsx-runtime': 'jsxRuntime',
                 },
             },
         },
