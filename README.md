@@ -2,7 +2,7 @@
 
 Headless React hook for French address autocomplete powered by the [Géoplateforme API](https://data.geopf.fr/geocodage).
 
-**Zero UI opinions** — bring your own components, styles and UI kit (MUI, Ant Design, shadcn/ui, Mantine, Tailwind, plain HTML...).
+**Zero UI opinions** bring your own components, styles and UI kit (MUI, Ant Design, shadcn/ui, Mantine, Tailwind, plain HTML...).
 
 ![Exemple](./ressources/example.png)
 
